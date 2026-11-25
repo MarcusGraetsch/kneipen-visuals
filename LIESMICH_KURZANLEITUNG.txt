@@ -3,8 +3,9 @@ KURZANLEITUNG: KNEIPEN-VISUALS EINRICHTEN (UBUNTU)
 
 VORAUSSETZUNGEN
 ---------------
-Ubuntu 26.10 oder neuer mit aktivierter universe-Paketquelle, eine
-grafische Desktop-Sitzung und eine funktionierende Audio-Sitzung.
+Ubuntu 20.04 oder neuer, eine grafische Desktop-Sitzung und eine
+funktionierende Audio-Sitzung. Auf älteren Ubuntu-Versionen baut das
+Setup projectM bei Bedarf automatisch aus dem offiziellen Quellcode.
 
 INSTALLATION
 ------------

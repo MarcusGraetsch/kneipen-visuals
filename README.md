@@ -10,7 +10,7 @@ Ohne Laser-Genehmigungen und ohne komplizierte Konfiguration: Das Setup richtet 
 
 Öffne auf dem Ubuntu-Laptop das Terminal (**`Strg` + `Alt` + `T`**) und führe aus:
 
-Das Repository benötigt eine grafische Ubuntu-Sitzung und eine funktionierende Audio-Sitzung. Der aktuell benötigte Ubuntu-Paketname `projectm-pulseaudio` ist in den Standardquellen derzeit ab Ubuntu 26.10 verfügbar; auf Ubuntu 22.04/24.04 bricht das Skript bewusst mit einer verständlichen Meldung ab, statt eine unvollständige Installation vorzunehmen.
+Das Repository benötigt eine grafische Ubuntu-Sitzung und eine funktionierende Audio-Sitzung. Auf Ubuntu-Versionen mit `projectm-pulseaudio` in den Paketquellen wird das Paket direkt installiert. Auf älteren Ubuntu-Versionen (einschließlich 20.04, 22.04 und 24.04) baut das Skript projectM 3.1.8 automatisch aus dem offiziellen Quellcode und installiert es nur im Home-Verzeichnis unter `~/.local/share/kneipen-visuals/`.
 
 ```bash
 git clone https://github.com/MarcusGraetsch/kneipen-visuals.git
@@ -24,7 +24,7 @@ Das Setup fragt bei Bedarf nach dem Benutzerpasswort für `sudo`. Es verändert 
 
 ## 🛠️ Was das Skript automatisch einrichtet
 
-* **Visual-Engine & Tools:** Installiert `projectm-pulseaudio`, `pavucontrol` und `unclutter`.
+* **Visual-Engine & Tools:** Installiert `projectm-pulseaudio` direkt oder baut projectM 3.1.8 für ältere Ubuntu-Versionen lokal; zusätzlich werden `pavucontrol` und `unclutter` installiert.
 * **Effekt-Vorlagen:** Richtet `~/.projectM/presets/` und eine vorkonfigurierte `config.inp` ein.
 * **Kneipen-Modus:** Deaktiviert über `gsettings` das automatische Abdunkeln und die Bildschirmsperre, wenn eine GNOME-Sitzung verfügbar ist.
 * **Desktop-Starter:** Startet Visuals, Lautstärkeregler und Maus-Ausblender über ein separates, aufräumendes Starter-Skript.
@@ -73,6 +73,6 @@ Stelle am Beamer den Bildmodus auf **Kino (Cinema)** oder **Dark Room**. Dadurch
 
 ## Fehlerbehebung
 
-- **`projectm-pulseaudio ist nicht verfügbar`:** Das Setup unterstützt derzeit Ubuntu 26.10 oder neuer mit aktivierter `universe`-Quelle. Eine laufende grafische Sitzung ist zusätzlich erforderlich.
+- **`projectm-pulseaudio ist nicht verfügbar`:** Auf älteren Ubuntu-Versionen baut `setup.sh` automatisch projectM 3.1.8 aus dem offiziellen Quellcode. Dafür werden Internetzugang, `git` und einige Build-Abhängigkeiten benötigt. Eine laufende grafische Sitzung ist zusätzlich erforderlich.
 - **Kein Audio sichtbar:** In pavucontrol unter **Aufnahme** die passende Quelle auswählen. Bei Musik vom selben Laptop ist meist eine Quelle mit der Endung `.monitor` richtig.
 - **Desktop-Starter fehlt:** `setup.sh` erneut ausführen oder `./start-kneipen-visuals.sh` im Terminal starten.

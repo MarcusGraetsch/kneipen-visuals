@@ -4,6 +4,11 @@ set -Eeuo pipefail
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
 TARGET_DIR="${HOME}/.projectM"
 PRESET_DIR="${TARGET_DIR}/presets"
+PROJECTM_VERSION="3.1.8"
+PROJECTM_COMMIT="2864bd7c318e1c5a6ae77c5a731982caf696816c"
+PROJECTM_SOURCE_URL="https://github.com/projectM-visualizer/projectm.git"
+PROJECTM_CACHE_DIR="${HOME}/.cache/kneipen-visuals/projectm-${PROJECTM_VERSION}"
+PROJECTM_PREFIX="${HOME}/.local/share/kneipen-visuals/projectm-${PROJECTM_VERSION}"
 
 die() {
     printf 'FEHLER: %s\n' "$*" >&2
@@ -20,10 +25,42 @@ fi
 command -v apt-get >/dev/null 2>&1 || die "Dieses Setup benötigt Ubuntu/Debian mit apt-get."
 command -v apt-cache >/dev/null 2>&1 || die "apt-cache wurde nicht gefunden."
 
-package_info="$(apt-cache show projectm-pulseaudio 2>/dev/null || true)"
-if [[ "${package_info}" != *$'Package: projectm-pulseaudio'* ]]; then
-    die "Das Paket projectm-pulseaudio ist in den aktivierten Paketquellen nicht verfügbar. Unterstützt wird derzeit Ubuntu 26.10 (oder neuer) mit aktivierter universe-Quelle. Auf älteren Ubuntu-Versionen muss projectM zuerst über eine passende Paketquelle installiert werden."
-fi
+projectm_package_available() {
+    apt-cache show projectm-pulseaudio 2>/dev/null | grep -q '^Package: projectm-pulseaudio$'
+}
+
+install_projectm_from_source() {
+    command -v git >/dev/null 2>&1 || die "git wird für den projectM-Quellcode benötigt. Bitte zuerst git installieren."
+
+    printf '%s\n' "Ältere Ubuntu-Version erkannt: projectM ${PROJECTM_VERSION} wird lokal aus dem Quellcode gebaut..."
+    "${SUDO[@]}" apt-get install -y build-essential autoconf automake libtool \
+        qtbase5-dev qtdeclarative5-dev libqt5opengl5-dev libpulse-dev \
+        libgl1-mesa-dev libglew-dev libftgl-dev
+
+    if [[ -d "${PROJECTM_CACHE_DIR}/.git" && "$(git -C "${PROJECTM_CACHE_DIR}" rev-parse HEAD 2>/dev/null || true)" != "${PROJECTM_COMMIT}" ]]; then
+        rm -rf -- "${PROJECTM_CACHE_DIR}"
+    fi
+    if [[ ! -d "${PROJECTM_CACHE_DIR}/.git" ]]; then
+        mkdir -p "$(dirname -- "${PROJECTM_CACHE_DIR}")"
+        git clone --depth 1 --branch "v${PROJECTM_VERSION}" "${PROJECTM_SOURCE_URL}" "${PROJECTM_CACHE_DIR}"
+    fi
+    [[ "$(git -C "${PROJECTM_CACHE_DIR}" rev-parse HEAD)" == "${PROJECTM_COMMIT}" ]] || \
+        die "Der projectM-Quellcode entspricht nicht dem erwarteten, geprüften Commit ${PROJECTM_COMMIT}."
+
+    if [[ ! -x "${PROJECTM_PREFIX}/bin/projectM-pulseaudio" ]]; then
+        rm -rf -- "${PROJECTM_PREFIX}"
+        mkdir -p "${PROJECTM_PREFIX}"
+        pushd "${PROJECTM_CACHE_DIR}" >/dev/null
+        ./autogen.sh
+        ./configure --prefix="${PROJECTM_PREFIX}" --enable-pulseaudio --disable-sdl --disable-jack
+        make -j"$(getconf _NPROCESSORS_ONLN 2>/dev/null || echo 2)"
+        make install
+        popd >/dev/null
+    fi
+
+    [[ -x "${PROJECTM_PREFIX}/bin/projectM-pulseaudio" ]] || \
+        die "Der projectM-Quellcode wurde gebaut, aber projectM-pulseaudio fehlt im Installationsverzeichnis."
+}
 
 printf '%s\n' '========================================================'
 printf '%s\n' '  Kneipen-Visuals: Automatische Einrichtung startet...'
@@ -31,9 +68,13 @@ printf '%s\n\n' '========================================================'
 
 printf '%s\n' '[1/5] Installiere Visual-Software und Hilfsprogramme...'
 "${SUDO[@]}" apt-get update -qq
-"${SUDO[@]}" apt-get install -y projectm-pulseaudio pavucontrol unclutter
+"${SUDO[@]}" apt-get install -y pavucontrol unclutter
 
-command -v projectM-pulseaudio >/dev/null 2>&1 || die "projectM wurde installiert, aber projectM-pulseaudio ist nicht im PATH."
+if projectm_package_available; then
+    "${SUDO[@]}" apt-get install -y projectm-pulseaudio
+else
+    install_projectm_from_source
+fi
 
 printf '%s\n' '[2/5] Richte Effekt-Vorlagen ein...'
 mkdir -p "${PRESET_DIR}"
