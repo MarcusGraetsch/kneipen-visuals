@@ -1,5 +1,6 @@
 [CmdletBinding()]
 param(
+    [string]$LogoPath = '',
     [string]$InstallRoot = (Join-Path $env:LOCALAPPDATA 'Kneipen-Visuals\projectMSDL-2.0.0-win64')
 )
 
@@ -66,7 +67,22 @@ if (-not (Test-Path -LiteralPath $Executable)) {
 New-Item -ItemType Directory -Path $CustomPresetRoot -Force | Out-Null
 Get-ChildItem -LiteralPath (Join-Path $RepoRoot 'presets') -Filter '*.milk' -File | Copy-Item -Destination $CustomPresetRoot -Force
 
+$TextureRoot = Join-Path $InstallRoot 'textures'
+New-Item -ItemType Directory -Path $TextureRoot -Force | Out-Null
+if (-not $LogoPath) {
+    $LogoPath = Join-Path $RepoRoot 'textures\pirata_logo.jpg'
+}
+if (Test-Path -LiteralPath $LogoPath -PathType Leaf) {
+    Copy-Item -LiteralPath $LogoPath -Destination (Join-Path $TextureRoot 'pirata_logo.jpg') -Force
+}
+if (-not (Test-Path -LiteralPath (Join-Path $TextureRoot 'pirata_logo.jpg'))) {
+    Remove-Item -LiteralPath (Join-Path $CustomPresetRoot 'Pirata_Laser.milk') -ErrorAction SilentlyContinue
+    Write-Warning 'Pirata-Preset deaktiviert: Logo fehlt. Setup erneut mit -LogoPath ausführen.'
+}
 New-Item -ItemType Directory -Path $AppDataRoot -Force | Out-Null
+if (Test-Path -LiteralPath $ConfigPath) {
+    Copy-Item -LiteralPath $ConfigPath -Destination "$ConfigPath.bak" -Force
+}
 $PresetPath = ($CustomPresetRoot -replace '\\', '/')
 $Config = @"
 # Kneipen-Visuals configuration. The projectM window can be moved to the projector.
@@ -89,7 +105,7 @@ projectM.hardCutsEnabled = true
 projectM.hardCutDuration = 20
 projectM.aspectCorrectionEnabled = true
 "@
-Set-Content -LiteralPath $ConfigPath -Value $Config -Encoding UTF8
+[IO.File]::WriteAllText($ConfigPath, $Config, (New-Object System.Text.UTF8Encoding($false)))
 
 Write-Host ''
 Write-Host 'FERTIG! Native Windows-Installation wurde eingerichtet.' -ForegroundColor Green
