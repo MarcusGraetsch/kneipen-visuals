@@ -103,3 +103,8 @@ Stelle am Beamer den Bildmodus auf **Kino (Cinema)** oder **Dark Room**. Dadurch
 ## Pirata Laser Deck (Logo-Modus)
 
 Eigenständiger musikreaktiver Renderer für Ubuntu und Windows, zusätzlich zu projectM. Siehe [Anleitung](docs/pirata-laser.md).
+
+
+## Native Pirata MilkDrop preset
+
+[Installation und Textur](docs/pirata-milkdrop.md). Der HTML-Modus ist optional.

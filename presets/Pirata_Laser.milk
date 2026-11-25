@@ -1,0 +1,35 @@
+MILKDROP_PRESET_VERSION=201
+PSVERSION=2
+PSVERSION_WARP=2
+PSVERSION_COMP=2
+[preset00]
+fRating=5.000
+fDecay=0.94
+fGammaAdj=1.0
+fWaveAlpha=0.0
+bTexWrap=0
+zoom=1.0
+rot=0.0
+warp=0.0
+warp_1=`shader_body {
+warp_2=`ret=tex2D(sampler_main,uv).rgb*0.92;
+warp_3=`}
+comp_1=`sampler sampler_fc_pirata_logo;
+comp_2=`shader_body {
+comp_3=`float2 p=(uv-0.5)*aspect.xy;
+comp_4=`float b=saturate(bass*0.35); float m=saturate(mid*0.35); float h=saturate(treb*0.35);
+comp_5=`float a=time*0.18; float c=cos(a); float s=sin(a);
+comp_6=`float2 z=float2(c*p.x-s*p.y,s*p.x+c*p.y)/(0.72+0.09*b)+0.5;
+comp_7=`float inside=step(0.0,z.x)*step(z.x,1.0)*step(0.0,z.y)*step(z.y,1.0);
+comp_8=`float3 logo=tex2D(sampler_fc_pirata_logo,saturate(z)).rgb;
+comp_9=`float white=smoothstep(0.38,0.85,min(logo.r,min(logo.g,logo.b)));
+comp_10=`float r=length(z-0.5); float theta=atan2(z.y-0.5,z.x-0.5);
+comp_11=`float rays=pow(abs(cos(theta*24.0)),24.0)*smoothstep(0.28,0.39,r)*(1.0-smoothstep(0.48,0.80,r));
+comp_12=`float pulse=0.55+0.45*sin(time*3.0+theta*5.0);
+comp_13=`float eye1=exp(-1800.0*dot(z-float2(0.519,0.432),z-float2(0.519,0.432)));
+comp_14=`float eye2=exp(-1800.0*dot(z-float2(0.600,0.435),z-float2(0.600,0.435)));
+comp_15=`float3 neon=float3(1.0,0.12,0.035);
+comp_16=`ret=inside*(logo*0.68+white*neon*(0.18+0.6*b)+neon*(eye1+eye2)*(0.25+0.8*h));
+comp_17=`ret+=neon*rays*(0.12+0.65*m)*pulse;
+comp_18=`ret=saturate(ret);
+comp_19=`}
