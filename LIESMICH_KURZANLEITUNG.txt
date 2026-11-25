@@ -1,0 +1,24 @@
+KURZANLEITUNG: KNEIPEN-VISUALS EINRICHTEN (UBUNTU)
+==================================================
+
+VORAUSSETZUNGEN
+---------------
+Ubuntu 26.10 oder neuer mit aktivierter universe-Paketquelle, eine
+grafische Desktop-Sitzung und eine funktionierende Audio-Sitzung.
+
+INSTALLATION
+------------
+Öffne das Terminal (Strg + Alt + T) und führe aus:
+
+  git clone https://github.com/MarcusGraetsch/kneipen-visuals.git
+  cd kneipen-visuals
+  bash setup.sh
+
+Falls nach dem Benutzerpasswort gefragt wird: eintippen und Enter drücken.
+
+ABEND
+-----
+1. Beamer per HDMI anschließen und unter Ubuntu den Modus „Erweitern“ wählen.
+2. Auf dem Desktop „Kneipen-Visuals starten“ doppelklicken.
+3. Das projectM-Fenster auf den Beamer ziehen und F für Vollbild drücken.
+4. In „Lautstärkeregler“ unter „Aufnahme“ die gewünschte Audioquelle wählen.
