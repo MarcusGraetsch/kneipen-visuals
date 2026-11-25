@@ -61,3 +61,7 @@ Nach git pull Setup erneut ausführen. Die Starter setzen explizite Preset-/Text
 `Pirata_Volumetric_Skull.milk` ist ein prozedurales 3D-SDF-Modell (Raymarching im MilkDrop-Composite-Shader, Shader Model 3). Ein massiver Totenkopf mit ausgeschnittenen Augenhöhlen, Kiefer, Zähnen, leuchtendem Auge und räumlichem Stachelring rotiert im Raum. Das Original-PNG dient als rückseitige Oberflächentextur. Kein importiertes Mesh; stilisierte Annäherung an das Logo. Lokale musikreaktive Blitze, kein Vollbild-Stroboskop. Bis zu 72 Raymarch-Schritte pro Pixel; GPU-Kompatibilität und FPS vor Einsatz prüfen. Bei Bedarf ein anderes Preset wählen oder die Fensterauflösung senken.
 
 Windows Einzeltest: `powershell -NoProfile -ExecutionPolicy Bypass -File .\start-kneipen-visuals-windows.ps1 -Preset Pirata_Volumetric_Skull`
+
+### Volumetric Skull – orientation and effect visibility fix
+
+Corrected screen Y orientation, separated the lower jaw from the upper skull and switched to a deliberately visible vertical jaw stroke with a slow idle animation plus bass/transient response. Electric arcs are now composited over the skull as well as behind it. The idle motion and local arc brightness are intentional diagnostic baselines, not beat tracking. Live GPU validation remains necessary.
