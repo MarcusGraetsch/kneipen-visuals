@@ -6,7 +6,7 @@ assert png[:8] == b"\x89PNG\r\n\x1a\n"
 assert png[12:16] == b"IHDR"
 w, h = struct.unpack(">II", png[16:24])
 assert w > 0 and h > 0
-for name in ("Pirata_Laser", "Pirata_3D_Electric", "Pirata_Crimson_Eye", "Pirata_Acid_Storm"):
+for name in ("Pirata_Laser", "Pirata_3D_Electric", "Pirata_Crimson_Eye", "Pirata_Acid_Storm", "Pirata_Volumetric_Skull"):
     preset = (root / "presets" / (name + ".milk")).read_text()
     assert "sampler_fc_pirata_logo" in preset
     assert "shader_body" in preset

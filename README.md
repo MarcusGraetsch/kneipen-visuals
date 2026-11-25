@@ -36,3 +36,9 @@ Native GPU-Shader und Textur müssen auf beiden Systemen noch live getestet werd
 - Pirata_Acid_Storm: gruene und violette Entladungen, schnellere Raumrotation.
 
 Nach git pull Setup erneut ausführen. Die Starter setzen explizite Preset-/Texturpfade. Windows Einzeltest: `powershell -NoProfile -ExecutionPolicy Bypass -File .\start-kneipen-visuals-windows.ps1 -Preset Pirata_3D_Electric`. Die Blitze sind lokal begrenzt, keine Vollbild-Stroboskope. Die Bass-/Treble-Transienten sind eine Annäherung an den Beat, keine BPM-Synchronisation. GPU- und Audio-Test ausstehend.
+
+## Pirata Volumetric Skull
+
+`Pirata_Volumetric_Skull.milk` ist ein prozedurales 3D-SDF-Modell (Raymarching im MilkDrop-Composite-Shader, Shader Model 3). Ein massiver Totenkopf mit ausgeschnittenen Augenhöhlen, Kiefer, Zähnen, leuchtendem Auge und räumlichem Stachelring rotiert im Raum. Das Original-PNG dient als rückseitige Oberflächentextur. Kein importiertes Mesh; stilisierte Annäherung an das Logo. Lokale musikreaktive Blitze, kein Vollbild-Stroboskop. Bis zu 72 Raymarch-Schritte pro Pixel; GPU-Kompatibilität und FPS vor Einsatz prüfen. Bei Bedarf ein anderes Preset wählen oder die Fensterauflösung senken.
+
+Windows Einzeltest: `powershell -NoProfile -ExecutionPolicy Bypass -File .\start-kneipen-visuals-windows.ps1 -Preset Pirata_Volumetric_Skull`
