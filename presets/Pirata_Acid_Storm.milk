@@ -1,0 +1,51 @@
+MILKDROP_PRESET_VERSION=201
+PSVERSION=2
+PSVERSION_WARP=2
+PSVERSION_COMP=2
+[preset00]
+fRating=5.000
+fDecay=0.94
+fGammaAdj=1.0
+fWaveAlpha=0.0
+bTexWrap=0
+zoom=1.0
+rot=0.0
+warp=0.0
+warp_1=`shader_body {
+warp_2=`ret=tex2D(sampler_main,uv).rgb*0.92;
+warp_3=`}
+comp_1=`sampler sampler_fc_pirata_logo;
+comp_2=`shader_body {
+comp_3=`float2 p=(uv-0.5)*aspect.xy;
+comp_4=`float b=saturate(bass*0.4); float m=saturate(mid*0.4); float h=saturate(treb*0.4);
+comp_5=`float hit=saturate((bass-bass_att)*0.9); float spark=saturate((treb-treb_att)*0.9);
+comp_6=`float yaw=time*0.72; float pitch=0.82*sin(time*0.37); float roll=0.25*sin(time*0.23);
+comp_7=`float cy=cos(yaw); float sy=sin(yaw); float cp=cos(pitch); float sp=sin(pitch); float cr=cos(roll); float sr=sin(roll);
+comp_8=`float3 u=float3(cy*cr+sy*sp*sr,cp*sr,-sy*cr+cy*sp*sr);
+comp_9=`float3 v=float3(-cy*sr+sy*sp*cr,cp*cr,sy*sr+cy*sp*cr);
+comp_10=`float3 n=cross(u,v);
+comp_11=`float3 ray=float3(p/(0.72+0.09*b),1.4); float denom=dot(n,ray);
+comp_12=`float d=1.4*n.z/(denom+0.0001); float3 q=ray*d-float3(0.0,0.0,1.4);
+comp_13=`float2 z=float2(dot(q,u),dot(q,v))+0.5;
+comp_14=`float vis=step(0.001,d)*step(0.025,abs(n.z))*step(0.0,z.x)*step(z.x,1.0)*step(0.0,z.y)*step(z.y,1.0);
+comp_15=`float4 tex=tex2D(sampler_fc_pirata_logo,saturate(z)); float3 logo=tex.rgb;
+comp_16=`float lum=max(logo.r,max(logo.g,logo.b)); float white=smoothstep(0.35,0.85,min(logo.r,min(logo.g,logo.b)));
+comp_17=`float3 neon=float3(0.20,1.0,0.08); float3 hot=float3(0.85,0.2,1.0);
+comp_18=`float2 e=z-float2(0.519,0.432); float2 e2=z-float2(0.600,0.435);
+comp_19=`float pupil=exp(-1900.0*dot(e,e)); float halo=exp(-240.0*dot(e,e)); float second=exp(-1500.0*dot(e2,e2));
+comp_20=`float2 a=z-0.5; float r=length(a); float th=atan2(a.y,a.x);
+comp_21=`float scan=exp(-70.0*abs(z.y-frac(time*0.24)));
+comp_22=`float spokes=pow(abs(cos(th*24.0+time*0.35)),20.0)*smoothstep(0.26,0.42,r)*(1.0-smoothstep(0.48,0.9,r));
+comp_23=`float ridge=abs(sin(th*7.0+17.0*r+2.0*sin(r*64.0+floor(time*6.0))));
+comp_24=`float bolt=exp(-22.0*ridge)*smoothstep(0.08,0.18,r)*(1.0-smoothstep(0.58,0.86,r));
+comp_25=`float branch=exp(-32.0*abs(sin(th*13.0-22.0*r+sin(r*91.0))))*smoothstep(0.27,0.4,r)*(1.0-smoothstep(0.58,0.75,r));
+comp_26=`float energy=saturate(0.10+0.32*m+0.42*hit+0.22*spark);
+comp_27=`float edge=0.55+0.45*abs(n.z);
+comp_28=`float3 surface=logo*(0.62+0.18*b)*edge+white*neon*(0.22+0.45*b+0.25*scan);
+comp_29=`surface+=hot*(pupil*(0.8+0.6*h)+halo*(0.12+0.35*hit)+second*0.38*h);
+comp_30=`surface+=neon*(bolt+0.55*branch)*energy*1;
+comp_31=`float2 bg=p; float br=length(bg); float bt=atan2(bg.y,bg.x);
+comp_32=`float outside=pow(abs(cos(bt*18.0-time*0.3)),32.0)*smoothstep(0.22,0.5,br)*(1.0-smoothstep(0.65,1.1,br));
+comp_33=`ret=vis*surface+neon*outside*(0.04+0.28*m)+neon*spokes*(0.10+0.35*b)*step(0.001,d);
+comp_34=`ret=saturate(ret);
+comp_35=`}

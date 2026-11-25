@@ -28,3 +28,11 @@ ESC Menü, Ctrl+F Vollbild, Ctrl+M Monitorwechsel, Space Preset sperren, N näch
 
 ## Status
 Native GPU-Shader und Textur müssen auf beiden Systemen noch live getestet werden. HTML-Deck bleibt nur als optionaler Altbestand. [Upstream-Release](https://github.com/projectM-visualizer/frontend-sdl-cpp/releases/tag/2.0.0-pre1).
+
+## Pirata 3D Collection
+
+- Pirata_3D_Electric: blau-weisse perspektivische Drehung und elektrische Entladungen.
+- Pirata_Crimson_Eye: rotes Auge, langsame Raumrotation und goldene Akzente.
+- Pirata_Acid_Storm: gruene und violette Entladungen, schnellere Raumrotation.
+
+Nach git pull Setup erneut ausführen. Die Starter setzen explizite Preset-/Texturpfade. Windows Einzeltest: `powershell -NoProfile -ExecutionPolicy Bypass -File .\start-kneipen-visuals-windows.ps1 -Preset Pirata_3D_Electric`. Die Blitze sind lokal begrenzt, keine Vollbild-Stroboskope. Die Bass-/Treble-Transienten sind eine Annäherung an den Beat, keine BPM-Synchronisation. GPU- und Audio-Test ausstehend.
