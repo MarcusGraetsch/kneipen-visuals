@@ -26,5 +26,18 @@ Im Preset-Menü `Pirata_Laser.milk` auswählen und bei Bedarf sperren. Das Logo 
 ## Bedienung
 ESC Menü, Ctrl+F Vollbild, Ctrl+M Monitorwechsel, Space Preset sperren, N nächstes, R zufälliges Preset, Ctrl+I Audioquelle wechseln. Unter Linux bei Audio-Problemen `SDL_AUDIODRIVER=pulseaudio bash start-kneipen-visuals.sh` versuchen; pavucontrol kann Monitor- oder Mikrofonquelle zuweisen. Windows: Audioquelle in Settings auswählen.
 
+## Ubuntu: eigenes Preset laden
+1. projectM starten und `Strg+B` drücken, damit Menü und Playlist sichtbar sind.
+2. **File -> Add Presets** wählen und im Repository den Ordner `presets` öffnen.
+3. `Kneipen_Bass_Puls.milk` oder `Kneipen_Neon_Tunnel.milk` auswählen.
+4. Den Eintrag anklicken; Rechtsklick bietet **Hard cut to this preset** oder **Soft cut to this preset**, Doppelklick lädt direkt.
+5. Mit `Strg+L` sperren und mit `Strg+F` auf Vollbild schalten. `Strg+N`, `Strg+P` und `Strg+R` wechseln Presets.
+
+## Windows: eigenes Preset laden
+1. `start-kneipen-visuals-windows.cmd` starten und das Visualisierungsfenster anklicken.
+2. Im Explorer `presets\Kneipen_Bass_Puls.milk` oder `presets\Kneipen_Neon_Tunnel.milk` greifen und auf das laufende projectM-Fenster ziehen.
+3. Nach dem Loslassen ist das Preset geladen; mit der Leertaste sperren. Den ganzen Ordner `presets` auf das Fenster ziehen, um ihn für die Sitzung als Playlist hinzuzufügen.
+4. `Esc` öffnet das Menü, `Strg+F` schaltet Vollbild, `N`/`P` wechseln Presets, `R` wählt zufällig, `Y` aktiviert Shuffle, `Strg+I` wechselt die Audioquelle und `Strg+Q` beendet projectM.
+
 ## Status
 Native GPU-Shader und Textur müssen auf beiden Systemen noch live getestet werden. HTML-Deck bleibt nur als optionaler Altbestand. [Upstream-Release](https://github.com/projectM-visualizer/frontend-sdl-cpp/releases/tag/2.0.0-pre1).

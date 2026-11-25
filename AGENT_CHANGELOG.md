@@ -1,5 +1,11 @@
 # Agent Changelog
 
+## 2026-11-25 — Bedienungsanleitung für Ubuntu und Windows ergänzt
+
+- **Dokumentation:** README und Kurz-Anleitung erklären jetzt Start, Audioauswahl, Mausbedienung und Tastaturbefehle getrennt für Ubuntu und Windows.
+- **Presets:** Das gezielte Laden von `Kneipen_Bass_Puls.milk` und `Kneipen_Neon_Tunnel.milk` per Ubuntu-Playlist bzw. Windows-Drag-and-drop ist beschrieben.
+- **Korrektur:** Vollbild wird für beide Frontends mit `Strg+F` dokumentiert; die bisherige Ubuntu-Angabe `F` war für das verwendete Qt-Frontend nicht zuverlässig.
+
 ## 2026-11-25 — Native Windows-PowerShell-Installation ergänzt
 
 - **Änderung:** `setup-windows.ps1` lädt das offizielle native projectMSDL-Windows-ZIP, prüft SHA-256 und richtet die Kneipen-Presets ein.

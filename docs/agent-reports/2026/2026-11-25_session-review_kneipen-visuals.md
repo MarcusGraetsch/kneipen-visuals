@@ -71,6 +71,12 @@ Das bisherige Repository enthielt ausschließlich Bash-Skripte und den Linux-Pul
 
 Der verwendete native projectMSDL-Download ist ein offizielles Pre-Release. Der Windows-Test muss daher auf einem echten 64-Bit-Windows-Rechner mit Audioquelle und Beamer erfolgen.
 
+## Nachtrag: Bedienungsanleitung und Preset-Nutzung
+
+Die README und die Kurz-Anleitung wurden um getrennte Ubuntu-/Windows-Abläufe erweitert. Enthalten sind Audioauswahl, Beamer-/Vollbildbedienung, Tastaturbefehle, Mausaktionen und das gezielte Laden der beiden Repository-Presets. Für Ubuntu wird die Qt-Playlist über **File → Add Presets** genutzt; für Windows wird das offizielle projectMSDL-Drag-and-drop-Verhalten beschrieben.
+
+Die Ubuntu-Dokumentation wurde außerdem auf `Strg+F` für Vollbild korrigiert; die frühere Angabe `F` passte nicht zuverlässig zum verwendeten Qt-Frontend.
+
 ## Nachtrag: Fallback für ältere Ubuntu-Versionen
 
 ### Umsetzung
