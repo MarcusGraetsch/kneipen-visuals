@@ -10,8 +10,14 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python tests/check-native-assets.py
       - if: runner.os == 'Linux'
-        run: bash -n setup.sh start-kneipen-visuals.sh
+        run: |
+          bash -n setup.sh
+          bash -n start-kneipen-visuals.sh
       - if: runner.os == 'Windows'
         shell: pwsh
         run: |

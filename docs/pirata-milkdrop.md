@@ -1,3 +1,3 @@
-# Native Pirata MilkDrop preset
+## Native Pirata MilkDrop
 
-Use projectM with MilkDrop 2 shader support (prefer libprojectM 4.x). Copy presets/Pirata_Laser.milk into the preset directory and the supplied original logo, renamed pirata_logo.jpg (or converted to PNG), into the configured texture directory. The sampler uses the basename without extension. For Windows projectMSDL the existing setup points at the application's textures directory. Linux legacy frontend texture discovery varies: configure the texture search path in a compatible frontend. No browser required. Shader compilation and texture loading still need a real projectM GPU test. The eye coordinates are approximate.
+Run the normal setup on Ubuntu or Windows. The supplied PNG is automatically copied from textures/pirata_logo.png into the configured projectMSDL texture directory. Select Pirata_Laser.milk in the preset menu. No HTML or manual logo selection. Shader compilation, precise eye positions and live audio still require GPU validation.

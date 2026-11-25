@@ -5,6 +5,9 @@ repo="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
 [[ $(uname -m) == x86_64 ]] || { echo 'Nur x86_64 unterstützt.' >&2; exit 1; }
 glibc=$(getconf GNU_LIBC_VERSION | awk '{print $2}')
 dpkg --compare-versions "$glibc" ge 2.35 || { echo 'Ubuntu 22.04 oder neuer erforderlich (glibc >= 2.35).' >&2; exit 1; }
+logo="${1:-$repo/textures/pirata_logo.png}"
+[[ -f "$logo" && "${logo,,}" == *.png ]] || { echo "PNG-Logo fehlt: $logo" >&2; exit 1; }
+[[ "$(od -An -tx1 -N8 "$logo" | tr -d ' \n')" == 89504e470d0a1a0a ]] || { echo "Ungültiges PNG: $logo" >&2; exit 1; }
 sudo apt-get update
 sudo apt-get install -y curl ca-certificates libsdl2-2.0-0 pavucontrol
 tmp=$(mktemp -d)
@@ -21,12 +24,8 @@ for d in /usr/share/projectM /usr/share/projectm; do
   if [[ -d "$d/textures" ]]; then cp -an "$d/textures/." "$root/textures/"; fi
 done
 cp -f "$repo"/presets/*.milk "$root/presets/"
-logo="${1:-$repo/textures/pirata_logo.jpg}"
-if [[ -f "$logo" ]]; then cp -f "$logo" "$root/textures/pirata_logo.jpg"; fi
-if [[ ! -f "$root/textures/pirata_logo.jpg" ]]; then
-  rm -f "$root/presets/Pirata_Laser.milk"
-  echo 'WARNUNG: Pirata-Preset deaktiviert. bash setup.sh /pfad/zum/logo.jpg'
-fi
+cp -f "$logo" "$root/textures/pirata_logo.png"
+rm -f "$root/textures/pirata_logo.jpg" "$root/textures/pirata_logo.jpeg"
 config="$cfg/projectMSDL.properties"
 if [[ -f "$config" ]]; then cp -f "$config" "$config.bak"; fi
 cat > "$config" <<EOF

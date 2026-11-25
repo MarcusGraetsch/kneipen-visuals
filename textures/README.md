@@ -1,1 +1,1 @@
-Place the original JPEG here as pirata_logo.jpg. The setup scripts install it alongside the MilkDrop textures.
+Bundled PNG texture used by Pirata_Laser.milk. Installed automatically.

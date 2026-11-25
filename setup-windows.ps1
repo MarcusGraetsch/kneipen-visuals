@@ -30,6 +30,15 @@ if (-not (Test-Path -LiteralPath $RepoRoot)) {
     Fail "Repository-Verzeichnis nicht gefunden: $RepoRoot"
 }
 
+if (-not $LogoPath) { $LogoPath = Join-Path $RepoRoot 'textures\pirata_logo.png' }
+if (-not (Test-Path -LiteralPath $LogoPath -PathType Leaf) -or [IO.Path]::GetExtension($LogoPath) -ne '.png') {
+    Fail "PNG-Logo fehlt: $LogoPath"
+}
+$LogoBytes = [IO.File]::ReadAllBytes($LogoPath)
+if ($LogoBytes.Length -lt 8 -or [BitConverter]::ToString($LogoBytes,0,8) -ne '89-50-4E-47-0D-0A-1A-0A') {
+    Fail "Ungültiges PNG: $LogoPath"
+}
+
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
 $Executable = Join-Path $InstallRoot 'projectMSDL.exe'
@@ -69,15 +78,9 @@ Get-ChildItem -LiteralPath (Join-Path $RepoRoot 'presets') -Filter '*.milk' -Fil
 
 $TextureRoot = Join-Path $InstallRoot 'textures'
 New-Item -ItemType Directory -Path $TextureRoot -Force | Out-Null
-if (-not $LogoPath) {
-    $LogoPath = Join-Path $RepoRoot 'textures\pirata_logo.jpg'
-}
-if (Test-Path -LiteralPath $LogoPath -PathType Leaf) {
-    Copy-Item -LiteralPath $LogoPath -Destination (Join-Path $TextureRoot 'pirata_logo.jpg') -Force
-}
-if (-not (Test-Path -LiteralPath (Join-Path $TextureRoot 'pirata_logo.jpg'))) {
-    Remove-Item -LiteralPath (Join-Path $CustomPresetRoot 'Pirata_Laser.milk') -ErrorAction SilentlyContinue
-    Write-Warning 'Pirata-Preset deaktiviert: Logo fehlt. Setup erneut mit -LogoPath ausführen.'
+Copy-Item -LiteralPath $LogoPath -Destination (Join-Path $TextureRoot 'pirata_logo.png') -Force
+foreach ($OldLogo in @('pirata_logo.jpg','pirata_logo.jpeg')) {
+    Remove-Item -LiteralPath (Join-Path $TextureRoot $OldLogo) -ErrorAction SilentlyContinue
 }
 New-Item -ItemType Directory -Path $AppDataRoot -Force | Out-Null
 if (Test-Path -LiteralPath $ConfigPath) {
