@@ -1,0 +1,3 @@
+# Pirata Laser Deck
+
+Alternativer eigenständiger Canvas/Web Audio Renderer, parallel zu projectM. Ubuntu: `bash start-pirata-laser.sh`; Windows: `start-pirata-laser.cmd` doppelklicken. Das Original-Logo über die Dateiauswahl laden (nicht im Repository enthalten). Browser Chromium/Edge empfohlen. F Vollbild, H Bedienfeld, B Blackout, 1–3 Presets. Audio-Eingang erlaubt Mikrofon/USB oder unter Linux eine Monitorquelle; Systemaudio teilen ist browser-/betriebssystemabhängig. Bei fehlender Audiofreigabe läuft Demo. Keine Audioübertragung. Sanfte Lichtwechsel standardmäßig aktiv; keine echten Laser. Vor Publikum mit Beamer und Musik testen. projectM-Installation und MilkDrop-Presets bleiben unverändert.

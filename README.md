@@ -98,3 +98,8 @@ Stelle am Beamer den Bildmodus auf **Kino (Cinema)** oder **Dark Room**. Dadurch
 - **Kein Audio sichtbar:** In pavucontrol unter **Aufnahme** die passende Quelle auswählen. Bei Musik vom selben Laptop ist meist eine Quelle mit der Endung `.monitor` richtig.
 - **Desktop-Starter fehlt:** `setup.sh` erneut ausführen oder `./start-kneipen-visuals.sh` im Terminal starten.
 - **Windows-Installation fehlt:** `setup-windows.ps1` erneut ausführen. Die Windows-Installation benötigt ein 64-Bit-Windows und Internetzugang für den offiziellen Release-Download.
+
+
+## Pirata Laser Deck (Logo-Modus)
+
+Eigenständiger musikreaktiver Renderer für Ubuntu und Windows, zusätzlich zu projectM. Siehe [Anleitung](docs/pirata-laser.md).
