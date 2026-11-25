@@ -17,49 +17,60 @@ warp_3=`}
 comp_1=`sampler sampler_fc_pirata_logo;
 comp_2=`float ppEllipsoid(float3 p,float3 r) { return (length(p/r)-1.0)*min(r.x,min(r.y,r.z)); }
 comp_3=`float ppBox(float3 p,float3 b) { float3 q=abs(p)-b; return length(max(q,0.0))+min(max(q.x,max(q.y,q.z)),0.0); }
-comp_4=`float2 ppModel(float3 p) {
-comp_5=`float skull=ppEllipsoid(p-float3(0.0,0.13,0.03),float3(0.39,0.43,0.34));
-comp_6=`float jaw=ppEllipsoid(p-float3(0.0,-0.28,-0.05),float3(0.24,0.24,0.25));
-comp_7=`float bone=min(skull,jaw);
-comp_8=`float3 e=p-float3(0.16,0.035,-0.28); float3 e2=p-float3(-0.16,0.035,-0.28);
-comp_9=`bone=max(bone,-min(ppEllipsoid(e,float3(0.125,0.105,0.16)),ppEllipsoid(e2,float3(0.125,0.105,0.16))));
-comp_10=`bone=max(bone,-ppEllipsoid(p-float3(0.0,-0.11,-0.30),float3(0.065,0.09,0.13)));
-comp_11=`float mouth=ppBox(p-float3(0.0,-0.29,-0.26),float3(0.22,0.042,0.10)); bone=max(bone,-mouth);
-comp_12=`float3 teeth=p-float3(0.0,-0.29,-0.265); teeth.x=teeth.x-0.073*clamp(floor(teeth.x/0.073+0.5),-2.0,2.0);
-comp_13=`bone=min(bone,ppBox(teeth,float3(0.025,0.06,0.045))-0.008);
-comp_14=`float eye=length(p-float3(0.16,0.035,-0.27))-0.062;
-comp_15=`float ring=length(float2(length(p.xy)-0.70,p.z))-0.065;
-comp_16=`float a=atan2(p.y,p.x); float sector=6.2831853/16.0; float k=floor(a/sector+0.5)*sector;
-comp_17=`float2 v=float2(cos(k)*p.x+sin(k)*p.y,-sin(k)*p.x+cos(k)*p.y);
-comp_18=`float x=v.x-0.70; float tip=0.91-v.x; float width=0.075*saturate(tip/0.21);
-comp_19=`float spike=max(max(-x, -tip),max(abs(v.y)-width,abs(p.z)-width));
-comp_20=`float metal=min(ring,spike);
-comp_21=`float2 result=float2(bone,1.0); if(metal<result.x) result=float2(metal,2.0); if(eye<result.x) result=float2(eye,3.0); return result;
-comp_22=`}
-comp_23=`float3 ppRotate(float3 p,float a,float b) { float ca=cos(a); float sa=sin(a); float cb=cos(b); float sb=sin(b); float3 q=float3(ca*p.x-sa*p.z,p.y,sa*p.x+ca*p.z); return float3(q.x,cb*q.y+sb*q.z,-sb*q.y+cb*q.z); }
-comp_24=`shader_body {
-comp_25=`float bassLevel=saturate(bass*0.35); float highLevel=saturate(treb*0.35); float beat=saturate((bass-bass_att)*0.65);
-comp_26=`float2 p=(uv-0.5)*aspect.xy; float yaw=time*0.40; float pitch=0.32*sin(time*0.43);
-comp_27=`float3 ro=ppRotate(float3(0.0,0.0,-3.0),yaw,pitch); float3 rd=ppRotate(normalize(float3(p*(2.3-0.25*bassLevel),1.0)),yaw,pitch);
-comp_28=`float t=0.0; float2 model=float2(1.0,0.0); float hit=0.0; float3 q=ro;
-comp_29=`float bound=dot(ro,rd); float disc=bound*bound-dot(ro,ro)+1.05;
-comp_30=`if(disc>0.0) { t=max(0.0,-bound-sqrt(disc));
-comp_31=`for(int i=0;i<72;i++) { q=ro+rd*t; model=ppModel(q); if(model.x<0.0025) { hit=1.0; break; } t+=max(0.001,model.x*0.75); if(t>5.0) break; } }
-comp_32=`float3 neon=float3(0.08,0.48,1.0); float3 red=float3(1.0,0.035,0.015);
-comp_33=`float radius=length(p); float theta=atan2(p.y,p.x);
-comp_34=`float bolt=exp(-24.0*abs(sin(theta*9.0+radius*24.0+1.5*sin(radius*92.0+floor(time*4.0)))));
-comp_35=`ret=neon*bolt*smoothstep(0.18,0.35,radius)*(1.0-smoothstep(0.55,0.95,radius))*(0.025+0.26*beat+0.12*highLevel);
-comp_36=`if(hit>0.5) {
-comp_37=`float eps=0.003; float3 normal=normalize(float3(ppModel(q+float3(eps,0,0)).x-ppModel(q-float3(eps,0,0)).x,ppModel(q+float3(0,eps,0)).x-ppModel(q-float3(0,eps,0)).x,ppModel(q+float3(0,0,eps)).x-ppModel(q-float3(0,0,eps)).x));
-comp_38=`float3 light=normalize(ppRotate(float3(-0.5,0.8,-0.7),yaw,pitch)); float diffuse=saturate(dot(normal,light));
-comp_39=`float rim=pow(1.0-saturate(dot(normal,-rd)),3.0); float shine=pow(saturate(dot(reflect(-light,normal),-rd)),22.0);
-comp_40=`float3 baseColor=float3(0.66,0.62,0.52);
-comp_41=`if(model.y>1.5) baseColor=float3(0.15,0.19,0.25)+neon*(0.22+0.45*bassLevel);
-comp_42=`float3 lit=baseColor*(0.18+0.82*diffuse)+neon*rim*(0.24+0.55*bassLevel)+shine*0.7;
-comp_43=`if(model.y>2.5) lit=red*(0.75+0.5*highLevel)+float3(1.0,0.45,0.12)*shine;
-comp_44=`float2 decal=q.xy/0.85+0.5; float3 logo=tex2D(sampler_fc_pirata_logo,saturate(decal)).rgb;
-comp_45=`if(model.y<1.5 && q.z>0.0) lit=lerp(lit,logo*(0.35+0.65*diffuse),0.45*smoothstep(0.15,0.75,max(logo.r,max(logo.g,logo.b))));
-comp_46=`ret=lit;
-comp_47=`}
-comp_48=`ret=saturate(ret);
-comp_49=`}
+comp_4=`float2 ppModel(float3 p,float jawAngle) {
+comp_5=`float3 pivot=float3(0.0,-0.13,0.085); float3 j=p-pivot; float ca=cos(jawAngle); float sa=sin(jawAngle); j=float3(j.x,ca*j.y-sa*j.z,sa*j.y+ca*j.z)+pivot;
+comp_6=`float3 ap=p; ap.x=abs(ap.x);
+comp_7=`float skull=ppEllipsoid(p-float3(0.0,0.13,0.03),float3(0.39,0.43,0.34));
+comp_8=`float jaw=ppEllipsoid(j-float3(0.0,-0.34,-0.05),float3(0.24,0.12,0.25));
+comp_9=`float cheek=ppEllipsoid(ap-float3(0.23,-0.04,-0.12),float3(0.145,0.13,0.19)); float upper=min(skull,cheek); float bone=upper;
+comp_10=`float3 e=p-float3(0.16,0.035,-0.28); float3 e2=p-float3(-0.16,0.035,-0.28);
+comp_11=`bone=max(bone,-min(ppEllipsoid(e,float3(0.125,0.105,0.16)),ppEllipsoid(e2,float3(0.125,0.105,0.16))));
+comp_12=`bone=max(bone,-ppEllipsoid(p-float3(0.0,-0.11,-0.30),float3(0.065,0.09,0.13)));
+comp_13=`float mouth=ppBox(p-float3(0.0,-0.29,-0.26),float3(0.22,0.042,0.10)); bone=max(bone,-mouth);
+comp_14=`float3 teeth=p-float3(0.0,-0.29,-0.265); teeth.x=teeth.x-0.073*clamp(floor(teeth.x/0.073+0.5),-2.0,2.0);
+comp_15=`float3 lower=j-float3(0.0,-0.30,-0.26); lower.x-=0.073*clamp(floor(lower.x/0.073+0.5),-2.0,2.0);
+comp_16=`float dental=min(ppBox(teeth+float3(0,-0.035,0),float3(0.025,0.033,0.045)),ppBox(lower,float3(0.025,0.038,0.045)))-0.005;
+comp_17=`bone=min(bone,jaw);
+comp_18=`float eye=length(p-float3(0.16,0.035,-0.27))-0.062;
+comp_19=`float ring=length(float2(length(p.xy)-0.70,p.z))-0.065;
+comp_20=`float a=atan2(p.y,p.x); float sector=6.2831853/16.0; float k=floor(a/sector+0.5)*sector;
+comp_21=`float2 v=float2(cos(k)*p.x+sin(k)*p.y,-sin(k)*p.x+cos(k)*p.y);
+comp_22=`float x=v.x-0.70; float tip=0.91-v.x; float width=0.075*saturate(tip/0.21);
+comp_23=`float spike=max(max(-x, -tip),max(abs(v.y)-width,abs(p.z)-width));
+comp_24=`float hinge=length(float2(length(ap.yz-float2(-0.13,0.085))-0.075,ap.x-0.26))-0.022;
+comp_25=`float rail=ppBox(ap-float3(0.31,0.12,-0.09),float3(0.04,0.15,0.055))-0.012;
+comp_26=`float optic=length(float2(length(p.xy-float2(0.16,0.035))-0.09,p.z+0.32))-0.016;
+comp_27=`float chip=ppBox(p-float3(0.0,0.32,-0.28),float3(0.10,0.07,0.04))-0.008;
+comp_28=`float metal=min(min(ring,spike),min(hinge,rail));
+comp_29=`float2 result=float2(bone,1.0); if(metal<result.x) result=float2(metal,2.0); if(min(eye,optic)<result.x) result=float2(min(eye,optic),3.0); if(dental<result.x) result=float2(dental,4.0); if(chip<result.x) result=float2(chip,5.0); return result;
+comp_30=`}
+comp_31=`float3 ppRotate(float3 p,float a,float b) { float ca=cos(a); float sa=sin(a); float cb=cos(b); float sb=sin(b); float3 q=float3(ca*p.x-sa*p.z,p.y,sa*p.x+ca*p.z); return float3(q.x,cb*q.y+sb*q.z,-sb*q.y+cb*q.z); }
+comp_32=`shader_body {
+comp_33=`float bassLevel=saturate(bass*0.35); float highLevel=saturate(treb*0.35); float beat=saturate((bass-bass_att)*0.65);
+comp_34=`float jawAngle=0.035+0.23*bassLevel+0.30*beat; float2 p=(uv-0.5)*aspect.xy; float yaw=0.60*sin(time*0.61)+0.14*sin(time*0.23); float pitch=0.19*sin(time*0.47);
+comp_35=`float3 ro=ppRotate(float3(0.0,0.0,-3.0),yaw,pitch); float3 rd=ppRotate(normalize(float3(p*(2.3-0.25*bassLevel),1.0)),yaw,pitch);
+comp_36=`float t=0.0; float2 model=float2(1.0,0.0); float hit=0.0; float3 q=ro;
+comp_37=`float bound=dot(ro,rd); float disc=bound*bound-dot(ro,ro)+1.05;
+comp_38=`if(disc>0.0) { t=max(0.0,-bound-sqrt(disc));
+comp_39=`for(int i=0;i<72;i++) { q=ro+rd*t; model=ppModel(q,jawAngle); if(model.x<0.0025) { hit=1.0; break; } t+=max(0.001,model.x*0.75); if(t>5.0) break; } }
+comp_40=`float3 neon=float3(0.08,0.48,1.0); float3 red=float3(1.0,0.035,0.015);
+comp_41=`float radius=length(p); float theta=atan2(p.y,p.x);
+comp_42=`float phase=floor(time*3.0); float ridge=abs(sin(theta*9.0+radius*24.0+1.5*sin(radius*92.0+phase)+0.5*sin(radius*173.0-phase))); float bolt=exp(-65.0*ridge); float glow=exp(-15.0*ridge); float fork=exp(-42.0*abs(sin(theta*15.0-radius*31.0+sin(radius*115.0+phase))));
+comp_43=`float energy=saturate(0.07+0.20*bassLevel+1.2*beat+0.20*highLevel); ret=(float3(0.8,0.96,1.0)*bolt+neon*glow*0.7+float3(0.65,0.08,1.0)*fork)*smoothstep(0.18,0.35,radius)*(1.0-smoothstep(0.55,0.95,radius))*energy;
+comp_44=`if(hit>0.5) {
+comp_45=`float eps=0.003; float3 normal=normalize(float3(ppModel(q+float3(eps,0,0),jawAngle).x-ppModel(q-float3(eps,0,0),jawAngle).x,ppModel(q+float3(0,eps,0),jawAngle).x-ppModel(q-float3(0,eps,0),jawAngle).x,ppModel(q+float3(0,0,eps),jawAngle).x-ppModel(q-float3(0,0,eps),jawAngle).x));
+comp_46=`float3 light=normalize(ppRotate(float3(-0.5,0.8,-0.7),yaw,pitch)); float diffuse=saturate(dot(normal,light));
+comp_47=`float rim=pow(1.0-saturate(dot(normal,-rd)),3.0); float shine=pow(saturate(dot(reflect(-light,normal),-rd)),22.0);
+comp_48=`float3 baseColor=float3(0.30,0.36,0.43); float seam=exp(-65.0*abs(sin(q.y*32.0+0.6*floor(abs(q.x)*19.0)))); baseColor*=1.0-0.55*seam;
+comp_49=`if(model.y>1.5 && model.y<2.5) baseColor=float3(0.15,0.19,0.25)+neon*(0.22+0.45*bassLevel);
+comp_50=`float3 lit=baseColor*(0.18+0.82*diffuse)+neon*rim*(0.24+0.55*bassLevel)+shine*0.7;
+comp_51=`if(model.y>2.5 && model.y<3.5) lit=red*(0.75+0.5*highLevel)+float3(1.0,0.45,0.12)*shine;
+comp_52=`float2 decal=q.xy/0.85+0.5; float3 logo=tex2D(sampler_fc_pirata_logo,saturate(decal)).rgb;
+comp_53=`if(model.y<1.5 && q.z>0.0) lit=lerp(lit,logo*(0.35+0.65*diffuse),0.45*smoothstep(0.15,0.75,max(logo.r,max(logo.g,logo.b))));
+comp_54=`if(model.y>3.5 && model.y<4.5) lit=float3(0.65,0.72,0.76)*(0.24+0.76*diffuse)+shine*0.8;
+comp_55=`if(model.y>4.5) { float2 grid=abs(frac(q.xy*72.0)-0.5); lit=neon*(0.28+0.65*step(0.32,max(grid.x,grid.y))); }
+comp_56=`float traces=exp(-65.0*abs(sin(q.x*43.0+floor(q.y*16.0)*0.67)))*smoothstep(0.10,0.28,abs(q.x));
+comp_57=`float arc=exp(-46.0*abs(sin(q.y*28.0+q.x*19.0+sin(q.x*68.0+phase)))); lit+=neon*(traces*0.25+arc*(0.10+0.85*beat))*step(q.z,-0.10); ret=lit;
+comp_58=`}
+comp_59=`ret=saturate(ret);
+comp_60=`}
