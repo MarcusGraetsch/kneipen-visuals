@@ -15,6 +15,17 @@ INSTALLATION
   cd kneipen-visuals
   bash setup.sh
 
+WINDOWS (OHNE WSL)
+------------------
+Öffne Windows PowerShell im Repository-Verzeichnis und führe aus:
+
+  powershell -NoProfile -ExecutionPolicy Bypass -File .\setup-windows.ps1
+
+Danach `start-kneipen-visuals-windows.cmd` doppelklicken. Im projectM-Menü
+unter Settings/Audio die gewünschte Mikrofon-, USB- oder Loopback-Quelle
+auswählen. Für den Beamer das Fenster auf den zweiten Bildschirm ziehen und
+Ctrl+F drücken.
+
 Falls nach dem Benutzerpasswort gefragt wird: eintippen und Enter drücken.
 
 ABEND

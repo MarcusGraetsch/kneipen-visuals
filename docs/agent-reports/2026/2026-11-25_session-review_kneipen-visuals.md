@@ -47,6 +47,30 @@ Der Ausgangsstand enthielt nur `README.md` und ein ZIP-Archiv. Der README-Clone-
 
 Auf der Zielmaschine mit Ubuntu 20.04+ testen, anschließend pavucontrol auf eine `.monitor`-Quelle oder das gewünschte USB-Audio-Interface stellen und den Beamer-/Vollbildablauf prüfen.
 
+## Nachtrag: Native Windows-Unterstützung
+
+### Lagebild
+
+Das bisherige Repository enthielt ausschließlich Bash-Skripte und den Linux-PulseAudio-Starter. Ein Windows-Nutzer hätte damit nur über WSL arbeiten können. Das offizielle projectM-SDL-Frontend stellt dagegen ein natives 64-Bit-Windows-ZIP mit `projectMSDL.exe` bereit.
+
+### Umsetzung
+
+- `setup-windows.ps1` lädt `projectMSDL-2.0.0-win64.zip` aus dem offiziellen projectM-Frontend-Release.
+- Der Download wird vor dem Entpacken gegen SHA-256 `7129cae0757970bd4fb2bf96aa7d6153fe9872d414c88c82b04a6396bdfe235b` geprüft.
+- Installation erfolgt unter `%LOCALAPPDATA%\Kneipen-Visuals\`; benutzerspezifische Konfiguration unter `%APPDATA%\projectM\projectMSDL.properties`.
+- Die beiden Repository-Presets werden zusätzlich in den Windows-Presetpfad kopiert.
+- `start-kneipen-visuals-windows.ps1` und `.cmd` ermöglichen Start aus PowerShell, CMD oder per Doppelklick.
+
+### Validierung
+
+- Offizielles Windows-ZIP temporär heruntergeladen und SHA-256 erfolgreich verifiziert.
+- Archivinhalt geprüft: 64-Bit-`projectMSDL.exe`, DLL-Abhängigkeiten, Presets, Texturen und Konfigurationsvorlage vorhanden.
+- PowerShell-Code auf PowerShell-5.1-kompatible Konstrukte beschränkt; ein echter Windows-GUI-/Audio-Test ist auf dieser Linux-VM nicht möglich.
+
+### Offenes Risiko
+
+Der verwendete native projectMSDL-Download ist ein offizielles Pre-Release. Der Windows-Test muss daher auf einem echten 64-Bit-Windows-Rechner mit Audioquelle und Beamer erfolgen.
+
 ## Nachtrag: Fallback für ältere Ubuntu-Versionen
 
 ### Umsetzung

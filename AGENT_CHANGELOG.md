@@ -1,5 +1,11 @@
 # Agent Changelog
 
+## 2026-11-25 — Native Windows-PowerShell-Installation ergänzt
+
+- **Änderung:** `setup-windows.ps1` lädt das offizielle native projectMSDL-Windows-ZIP, prüft SHA-256 und richtet die Kneipen-Presets ein.
+- **Starter:** `start-kneipen-visuals-windows.ps1` und `.cmd` für PowerShell bzw. Doppelklick ergänzt.
+- **Voraussetzung:** 64-Bit-Windows, kein WSL erforderlich.
+
 ## 2026-11-25 — Ältere Ubuntu-Versionen über lokalen projectM-Build unterstützt
 
 - **Befund:** Ubuntu 22.04 stellt `projectm-pulseaudio` nicht bereit, obwohl die projectM-Bibliothek verfügbar ist.

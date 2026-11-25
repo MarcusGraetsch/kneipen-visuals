@@ -20,6 +20,24 @@ bash setup.sh
 
 Das Setup fragt bei Bedarf nach dem Benutzerpasswort für `sudo`. Es verändert nur die projectM-Dateien im Home-Verzeichnis, die GNOME-Energiespareinstellungen der aktuellen Sitzung und einen Desktop-Starter.
 
+## Native Installation auf Windows
+
+Die Windows-Variante benötigt weder WSL noch Docker. Sie lädt das offizielle native 64-Bit-`projectMSDL.exe`-Release herunter, prüft die SHA-256-Prüfsumme, kopiert die mitgelieferten Kneipen-Presets und legt die Installation unter `%LOCALAPPDATA%\Kneipen-Visuals\` ab. Der verwendete projectMSDL-Release ist aktuell als Pre-Release gekennzeichnet.
+
+Öffne **Windows PowerShell** oder die Eingabeaufforderung im Repository-Verzeichnis und führe aus:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\setup-windows.ps1
+```
+
+Danach startest du die Visuals mit einem Doppelklick auf `start-kneipen-visuals-windows.cmd` oder per:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\start-kneipen-visuals-windows.ps1
+```
+
+Im projectM-Menü kannst du unter **Settings/Audio** das gewünschte Mikrofon, USB-Interface oder einen Windows-Audio-Loopback auswählen. Für den Beamer das Fenster auf den zweiten Bildschirm ziehen und `Ctrl+F` drücken.
+
 ---
 
 ## 🛠️ Was das Skript automatisch einrichtet
@@ -64,7 +82,10 @@ Stelle am Beamer den Bildmodus auf **Kino (Cinema)** oder **Dark Room**. Dadurch
 
 ```text
 ├── setup.sh                         # Ubuntu-Installation und Konfiguration
-├── start-kneipen-visuals.sh         # Robuster Desktop-/Terminal-Starter
+├── setup-windows.ps1                # Native Windows-PowerShell-Installation
+├── start-kneipen-visuals.sh         # Linux-Starter
+├── start-kneipen-visuals-windows.ps1 # Windows-PowerShell-Starter
+├── start-kneipen-visuals-windows.cmd # Windows-Doppelklick-Starter
 ├── LIESMICH_KURZANLEITUNG.txt       # Kompakte Offline-Anleitung
 └── presets/                         # Eigene MilkDrop-Presets (.milk)
     ├── Kneipen_Bass_Puls.milk
@@ -76,3 +97,4 @@ Stelle am Beamer den Bildmodus auf **Kino (Cinema)** oder **Dark Room**. Dadurch
 - **`projectm-pulseaudio ist nicht verfügbar`:** Auf älteren Ubuntu-Versionen baut `setup.sh` automatisch projectM 3.1.8 aus dem offiziellen Quellcode. Dafür werden Internetzugang, `git` und einige Build-Abhängigkeiten benötigt. Eine laufende grafische Sitzung ist zusätzlich erforderlich.
 - **Kein Audio sichtbar:** In pavucontrol unter **Aufnahme** die passende Quelle auswählen. Bei Musik vom selben Laptop ist meist eine Quelle mit der Endung `.monitor` richtig.
 - **Desktop-Starter fehlt:** `setup.sh` erneut ausführen oder `./start-kneipen-visuals.sh` im Terminal starten.
+- **Windows-Installation fehlt:** `setup-windows.ps1` erneut ausführen. Die Windows-Installation benötigt ein 64-Bit-Windows und Internetzugang für den offiziellen Release-Download.
