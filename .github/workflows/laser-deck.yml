@@ -1,0 +1,29 @@
+name: Cross-platform Laser Deck
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  package:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node tests/check-laser.cjs
+      - if: runner.os == 'Linux'
+        run: bash -n start-pirata-laser.sh
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pirata-laser-${{ matrix.os }}
+          path: |
+            pirata-laser.html
+            start-pirata-laser.sh
+            start-pirata-laser.cmd
+            docs/pirata-laser.md
